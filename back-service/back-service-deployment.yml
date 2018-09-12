@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8082
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: backend
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: gcr.io/mark-test-178322/back-service:latest
+          name: back-service
+          ports:
+            - containerPort: 8080
